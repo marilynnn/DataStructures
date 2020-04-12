@@ -110,12 +110,11 @@ float MyVector::loadFactor() {
 }
 
 ValueType& MyVector::operator[](const size_t i) const {
-	if (i > 0 && i < _size) {
+	if (i < _size) {
 		return _data[i];
 	}
 	else {
-		cout<< "incorrect index"<<endl;
-			return;
+		cout<< "incorrect index"<<endl;			
 	}
 }
 
@@ -133,7 +132,7 @@ void MyVector::pushBack(const ValueType& value) {
 }
 
 void MyVector::insert(const size_t i, const ValueType& value) {
-	if (i < 0 || i > _capacity)
+	if (i > _capacity - 1)
 	{
 		cout<< "incorrect index"<<endl;
 		return;
@@ -151,7 +150,7 @@ void MyVector::insert(const size_t i, const ValueType& value) {
 }
 
 void MyVector::insert(const size_t i, const MyVector& value) {
-	if (i < 0 || i > _capacity)
+	if (i > _capacity - 1)
 	{
 		cout<< "incorrect index"<<endl;
 		return;
@@ -176,20 +175,20 @@ void MyVector::popBack() {
 };
 
 void MyVector::erase(const size_t i) {
-	if (i < 0 || i > _size-1)
+	if  (i > _size - 1)
 	{
 		cout<< "incorrect index"<<endl;
 		return;
 	}
 	for (size_t index = i; index < _size; index++) {
-		_data[i] = _data[i + 1];
+		_data[index] = _data[index + 1];
 	}
 	_size--;
 	resize();
 }
 
 void MyVector::erase(const size_t i, const size_t len) {
-	if (i < 0 || i > _size - 1)
+	if ( i > _size - 1)
 	{
 		cout<< "incorrect index"<<endl;
 		return;
@@ -247,8 +246,8 @@ void MyVector::resize(const size_t size, const ValueType value) {
 		if (loadFactor() > 1) {
 			resize();
 		}
-		for (size_t index = oldSize; index = _size - 1; index++) {
-			_data[index] = value;
+		for (size_t ind = oldSize ; ind < _size; ind++) {
+			_data[ind] = value;
 		}
 	}
 	else {
@@ -257,7 +256,8 @@ void MyVector::resize(const size_t size, const ValueType value) {
 }
 	
 void MyVector::resize() {
-	if (size == 0) {
+
+	if (_size == 0) {
 		_capacity = 1;
 	}
 	switch (_strategy) {
