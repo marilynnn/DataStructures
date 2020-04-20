@@ -91,7 +91,7 @@ public:
 	ValueType* end() { return (_data + _size); }
 
 	//реализация метода sortedSquares 
-	MyVector sortedSquares(const MyVector& vec, SortedStrategy strategy);
+	static MyVector sortedSquares(const MyVector& vec, SortedStrategy strategy);
 
 private:
 	ValueType* _data; 

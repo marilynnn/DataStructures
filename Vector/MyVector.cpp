@@ -13,23 +13,24 @@ MyVector::MyVector(size_t size, ResizeStrategy strategy, float coef)
 	case (ResizeStrategy::Multiplicative):
 		if (size == 0) {
 			_capacity = 1;
-			_data = nullptr;
+			
 		}
 		else{
 			_capacity = ceil(_coef * _size);
-			_data = new ValueType[_capacity];
+			
 		}
 	break;
 
 	case (ResizeStrategy::Additive) :
 		_capacity = ceil(_size + _coef);
-		_data = new ValueType[_capacity];
+		
 	break;
 
 	default:
 		cout<< "incorrect strategy"<<endl;
 		break;
 	}
+	_data = new ValueType[_capacity];
 }
 
 MyVector::MyVector(size_t size, ValueType value, ResizeStrategy strategy, float coef) 
@@ -51,7 +52,7 @@ MyVector::MyVector(size_t size, ValueType value, ResizeStrategy strategy, float 
 			break;
 
 		default:
-			cout<< "incorrect strategy"<<endl;
+			throw std::invalid_argument("incorrect strategy");
 			break;
 		}
 		
@@ -114,7 +115,7 @@ ValueType& MyVector::operator[](const size_t i) const {
 		return _data[i];
 	}
 	else {
-		cout<< "incorrect index"<<endl;			
+		throw std::invalid_argument("incorrect index");
 	}
 }
 
@@ -134,14 +135,13 @@ void MyVector::pushBack(const ValueType& value) {
 void MyVector::insert(const size_t i, const ValueType& value) {
 	if (i > _capacity - 1)
 	{
-		cout<< "incorrect index"<<endl;
-		return;
+		throw std::invalid_argument("incorrect index");
 	}
 
 	if (loadFactor() == 1) {
 		resize();
 	}
-	for (int index = _size; index < i; index--) {
+	for (int index = _size; index > i; index--) {
 		_data[index] = _data[index - 1];
 	}
 	_data[i] = value;
@@ -152,20 +152,22 @@ void MyVector::insert(const size_t i, const ValueType& value) {
 void MyVector::insert(const size_t i, const MyVector& value) {
 	if (i > _capacity - 1)
 	{
-		cout<< "incorrect index"<<endl;
-		return;
+		throw std::invalid_argument("incorrect index");
+		
 	}
 
 	if ((value._size + _size) / _capacity >= 1) {
 		reserve((value._size + _size)*_coef);
 	}
-	for (size_t index = value._size + _size - 1; index < i + value._size - 1; index--) {
-		_data[index] = _data[index - value._size];
+	for (size_t index = _size; index >= i; --index) {
+		_data[index + value._size] = _data[index];
 	} 
 
-	for (size_t index = i; index < i + value._size; ++index) {
-		_data[index] = value._data[index - i];
+	for (size_t index = 0; index < value._size; ++index) {
+		_data[i+index] = value._data[index];
 	}
+
+	_size += value._size;
 
 }
 
@@ -177,8 +179,8 @@ void MyVector::popBack() {
 void MyVector::erase(const size_t i) {
 	if  (i > _size - 1)
 	{
-		cout<< "incorrect index"<<endl;
-		return;
+		throw std::invalid_argument("incorrect index");
+		
 	}
 	for (size_t index = i; index < _size; index++) {
 		_data[index] = _data[index + 1];
@@ -190,13 +192,13 @@ void MyVector::erase(const size_t i) {
 void MyVector::erase(const size_t i, const size_t len) {
 	if ( i > _size - 1)
 	{
-		cout<< "incorrect index"<<endl;
-		return;
+		throw std::invalid_argument("incorrect index");
+		
 	}
-	if (i + len > _size-1 )
+	if (i + len > _size )
 	{
-		cout<< "incorrect lenght"<<endl;
-		return;
+		throw std::length_error("incorrect lenght"); 
+		
 	}
 	for (size_t index = i; index < _size; index++) {
 		_data[i] = _data[i + len];
@@ -236,8 +238,8 @@ void MyVector::reserve(const size_t capacity) {
 
 void MyVector::resize(const size_t size, const ValueType value) {
 	if (_size == size) {
-		cout<< "old size is equal to new size" <<endl;
-		return;
+		throw std::invalid_argument("incorrect lenght");
+		
 	}
 	size_t oldSize = _size;
 	_size = size;
@@ -276,7 +278,7 @@ void MyVector::resize() {
 			break;
 
 		default:
-			cout<< "incorrect strategy"<<endl;
+		   throw std::invalid_argument("incorrect strategy");
 			break;
 	}
 
@@ -324,7 +326,7 @@ MyVector MyVector::sortedSquares(const MyVector& vec, SortedStrategy strategy) {
 		break;
 
 	case(SortedStrategy::Ascending):
-		for (size_t i = vec._size; i > 0; i--) {
+		for (int i = vec._size-1; i >= 0; i--) {
 			if (leftValue > rightValue) {
 				sorted._data[i] = leftValue;
 				leftEnd++;
@@ -338,7 +340,7 @@ MyVector MyVector::sortedSquares(const MyVector& vec, SortedStrategy strategy) {
 		}
 		break;
 	default:
-		cout << "incorrect strategy" <<endl;
+		throw std::invalid_argument("incorrect strategy");
 		break;
 
 	}
