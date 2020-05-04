@@ -40,10 +40,10 @@ LinkedList& LinkedList::operator=(const LinkedList& copyList)
 	}
 
 	forceNodeDelete(_head);
-	LinkedList bufList(copyList);
+	LinkedList* bufList = new LinkedList(copyList);
 
-	this->_size = bufList._size;
-	this->_head = bufList._head;
+	this->_size = bufList->_size;
+	this->_head = bufList->_head;
 
 	return *this;
 }
@@ -280,7 +280,4 @@ void LinkedList::forceNodeDelete(Node* node)
 	Node* nextDeleteNode = node->next;
 	delete node;
 	forceNodeDelete(nextDeleteNode);
-}
-int main() {
-	return 0;
 }
