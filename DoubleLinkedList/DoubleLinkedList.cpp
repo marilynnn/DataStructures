@@ -56,11 +56,11 @@ DoubleLinkedList& DoubleLinkedList::operator=(const DoubleLinkedList& copyList)
 		return *this;
 	}
 	forceNodeDelete(_head);							
-	DoubleLinkedList bufList(copyList);
+	DoubleLinkedList* bufList = new DoubleLinkedList(copyList);
 
-	this->_size = bufList._size;
-	this->_head = bufList._head;
-	this->_tail = bufList._tail;
+	this->_size = bufList->_size;
+	this->_head = bufList->_head;
+	this->_tail = bufList->_tail;
 
 	return *this;
 }
