@@ -292,8 +292,10 @@ void MyVector::resize() {
 }
 
 void MyVector::clear() {
-	delete[] _data;
-	_data = nullptr;
+	
+	for (size_t i = 0; i < _size; ++i){
+       		 _data[i] = 0;
+	}
 	_size = 0;
 }
 
