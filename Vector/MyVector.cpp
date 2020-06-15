@@ -76,16 +76,14 @@ MyVector& MyVector::operator=(const MyVector& copy) {
 		return *this;
 	}
 
-	delete[] _data;
-
+	
+	MyVector buf(copy);
 	_size = copy._size;
 	_capacity = copy._capacity;
 	_strategy = copy._strategy;
 	_coef = copy._coef;
-
-	for (size_t index = 0; index < _size; index++) {
-		_data[index] = copy._data[index];
-	}
+	std::swap(this->_data, buf._data);
+	
 	return *this;
 }
 
