@@ -106,7 +106,7 @@ size_t MyVector::capacity() const {
 }
 
 size_t MyVector::size() const {
-    return _size;
+    return _size; 
 }
 
 float MyVector::loadFactor() {
