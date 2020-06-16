@@ -1,14 +1,16 @@
 #pragma once
 
+#include <cstddef>
+
 // стратегия изменения capacity
 enum class ResizeStrategy {
-	Additive,
-	Multiplicative
+    Additive,
+    Multiplicative
 };
 
 enum class SortedStrategy {
-	Ascending,
-	Descedign
+    Ascending,
+    Descending
 };
 
 
@@ -19,84 +21,82 @@ using ValueType = double;
 class MyVector
 {
 public:
-	
+
 /*	class Iterator
 	{
 	public:
 		Iterator():ptr(nullptr) {};
 		Iterator(ValueType* pointer) : ptr(pointer) {};
-
 		ValueType* begin() { return Iterator(_data); }
 		ValueType* end() {return Iterator(_data + _size); }
-
 	private:
 		ValueType* ptr;
 	};*/
 
-	MyVector(size_t size = 0, ResizeStrategy strategy = ResizeStrategy::Multiplicative, float coef = 1.5f);
-	MyVector(size_t size, ValueType value, ResizeStrategy strategy = ResizeStrategy::Multiplicative, float coef = 1.5f);
+    MyVector(size_t size = 0, ResizeStrategy strategy = ResizeStrategy::Multiplicative, float coef = 1.5f);
+    MyVector(size_t size, ValueType value, ResizeStrategy strategy = ResizeStrategy::Multiplicative, float coef = 1.5f);
 
-	MyVector(const MyVector& copy);
-	MyVector& operator=(const MyVector& copy);
+    MyVector(const MyVector& copy);
+    MyVector& operator=(const MyVector& copy);
 
-	~MyVector();
+    ~MyVector();
 
-	// для умненьких — реализовать конструктор и оператор для перемещения
+    // для умненьких — реализовать конструктор и оператор для перемещения
 
-	size_t capacity() const;
-	size_t size() const;
-	float loadFactor();
+    size_t capacity() const;
+    size_t size() const;
+    float loadFactor();
 
-	// доступ к элементу, 
-	// должен работать за O(1)
-	ValueType& operator[](const size_t i) const;
+    // доступ к элементу,
+    // должен работать за O(1)
+    ValueType& operator[](const size_t i) const;
 
-	// добавить в конец,
-	// должен работать за amort(O(1))
-	void pushBack(const ValueType& value);
-	// вставить,
-	// должен работать за O(n)
-	void insert(const size_t i, const ValueType& value);	// версия для одного значения
-	void insert(const size_t i, const MyVector& value);		// версия для вектора
+    // добавить в конец,
+    // должен работать за amort(O(1))
+    void pushBack(const ValueType& value);
+    // вставить,
+    // должен работать за O(n)
+    void insert(const size_t i, const ValueType& value);	// версия для одного значения
+    void insert(const size_t i, const MyVector& value);		// версия для вектора
 
-	// удалить с конца,
-	// должен работать за amort(O(1))
-	void popBack();
-	// удалить
-	// должен работать за O(n)
-	void erase(const size_t i);
-	void erase(const size_t i, const size_t len);			// удалить len элементов начиная с i
+    // удалить с конца,
+    // должен работать за amort(O(1))
+    void popBack();
+    // удалить
+    // должен работать за O(n)
+    void erase(const size_t i);
+    void erase(const size_t i, const size_t len);			// удалить len элементов начиная с i
 
-	// найти элемент,
-	// должен работать за O(n)
-	// если isBegin == true, найти индекс первого элемента, равного value, иначе последнего
-	// если искомого элемента нет, вернуть -1
-	long long int find(const ValueType& value, bool isBegin = true) const;
+    // найти элемент,
+    // должен работать за O(n)
+    // если isBegin == true, найти индекс первого элемента, равного value, иначе последнего
+    // если искомого элемента нет, вернуть -1
+    long long int find(const ValueType& value, bool isBegin = true) const;
 
-	// зарезервировать память (принудительно задать capacity)
-	void reserve(const size_t capacity);
+    // зарезервировать память (принудительно задать capacity)
+    void reserve(const size_t capacity);
 
-	// изменить размер
-	// если новый размер больше текущего, то новые элементы забиваются дефолтными значениями
-	// если меньше - обрезаем вектор
-	void resize(const size_t size, const ValueType value = 0.0);
+    // изменить размер
+    // если новый размер больше текущего, то новые элементы забиваются дефолтными значениями
+    // если меньше - обрезаем вектор
+    void resize(const size_t size, const ValueType value = 0.0);
 
-	//изменение capacity в зависимости от стратегии
-	void resize();
+    //изменение capacity в зависимости от стратегии
+    void resize();
 
-	// очистка вектора, без изменения capacity
-	void clear();
+    // очистка вектора, без изменения capacity
+    void clear();
 
-	ValueType* begin() { return _data; }
-	ValueType* end() { return (_data + _size); }
+    ValueType* begin() { return _data; }
+    ValueType* end() { return (_data + _size); }
 
-	//реализация метода sortedSquares 
-	static MyVector sortedSquares(const MyVector& vec, SortedStrategy strategy);
+    //реализация метода sortedSquares
+    static MyVector sortedSquares(const MyVector& vec, SortedStrategy strategy);
 
 private:
-	ValueType* _data; 
-	size_t _size;
-	size_t _capacity;
-	ResizeStrategy _strategy;
-	float _coef;
+    ValueType* _data;
+    size_t _size;
+    size_t _capacity;
+    ResizeStrategy _strategy;
+    float _coef;
 };
